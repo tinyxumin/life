@@ -1,6 +1,6 @@
 <?php
 
-namespace app\home\model;
+namespace app\admin\model;
 
 use think\Model;
 
@@ -15,6 +15,12 @@ class User extends Model
         //需要调用`Model`的`initialize`方法
         parent::initialize();
         //TODO:自定义的初始化
+    }
+
+    public function userLogin($where)
+    {
+        $data = User::where($where)->field('userId,userName,image,phone,email')->find();
+        return $data;
     }
 
 }
