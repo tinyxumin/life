@@ -47,8 +47,7 @@ class Index extends Controller
      */
     public function create()
     {
-        //
-        heeloo!;
+        //k
     }
 
     /**
