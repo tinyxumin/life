@@ -8,7 +8,7 @@ use think\Cookie;
 use think\Session;
 use app\admin\model\User;
 
-class login extends Controller
+class Login extends Controller
 {
     private $user;
      /**
@@ -16,7 +16,6 @@ class login extends Controller
      */
     public function _initialize()
     {
-        parent::_initialize();
         $user = new User;
         $this->user = $user;
     }
@@ -61,6 +60,10 @@ class login extends Controller
     public function save(Request $request)
     {
         $info = $request->post();
+        if(empty($info['userName']) || empty($info['phone'])){
+            echo "<script>alert('请输入个人信息');</script>";
+            return view('login/registration');
+        }
         if(empty($info['agree'])){
             echo "<script>alert('请同意徐家政策!');</script>";
             return view('login/registration');
@@ -69,15 +72,17 @@ class login extends Controller
             echo "<script>alert('密码不一致!');</script>";
             return view('login/registration');
         }
+        $date = date('Y-m-d H:i:s');
         $this->user->data([
             'userName' => $info['userName'],
             'phone'    => $info['phone'],
-            'password' => md5($info['repas'])
+            'password' => md5($info['repas']),
+            'addTime'  => $date
             
         ]);
         $res = $this->user->save();
         if($res){
-            return $this->success('添加成功','login/index');
+            return $this->success('添加成功','admin/login/index');
         }
     }
 
@@ -89,6 +94,9 @@ class login extends Controller
         // cookie('name', null);     助手函数  删除cookie
         // session('name', null);     助手函数  删除session
         $info = $request->post();
+        if (empty($info)){
+            return view('login/login');die;
+        }
         $where = [
             'phone'=>$info['phone'],
             'password' => md5($info['password'])
@@ -98,9 +106,10 @@ class login extends Controller
             $token = md5(time()).$res['userId'];
             Cookie::set('token',$token,24*3600);
             Cookie::set('userId',$res['userId']);
+            Cookie::set('userName',$res['userName']);
             Session::set('token',$token);
             $this->user->save(['token'=>$token],['userId'=>$res['userId']]);
-            return view('account/account',['userName'=>$res['userName']]);
+            return view('account/account',['userName'=>$res['userName'],'data'=>$res]);
         }else{
             return $this->error('用户名和密码错误');
         }

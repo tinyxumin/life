@@ -17,9 +17,26 @@ class User extends Model
         //TODO:自定义的初始化
     }
 
+    /**
+     * 查询用户信息
+     * @param $where
+     * @return array
+     */
     public function userLogin($where)
     {
-        $data = User::where($where)->field('userId,userName,image,phone,email')->find();
+        $data = User::where($where)->field('userId,address,userName,phone,age,birthday,addTime,email,sex,image')->find();
+        return $data;
+    }
+
+
+    /**
+     * 查询用户信息
+     * @param $where
+     * @return array
+     */
+    public function userInfo()
+    {
+        $data = User::field('userId,address,userName,phone,age,birthday,addTime,email,sex')->select();
         return $data;
     }
 

@@ -74,14 +74,13 @@
 
             <!--sidebar nav start-->
             <ul class="nav nav-pills nav-stacked custom-nav">
-                <li class="active"><a href="{:url('admin/index/index')}"><i class="fa fa-home"></i> <span>Dashboard</span></a></li>
-                <li class="menu-list"><a href=""><i class="fa fa-laptop"></i> <span>Layouts</span></a>
+                <li class="active"><a href="{:url('admin/index/index')}"><i class="fa fa-home"></i> <span>主页</span></a></li>
+                <li class="menu-list"><a href=""><i class="fa fa-laptop"></i> <span>家庭</span></a>
                     <ul class="sub-menu-list">
-                        <li><a href="blank_page.html"> Blank Page</a></li>
+                        <li><a href="{:url('admin/family/index')}"> 家庭成员</a></li>
                         <li><a href="boxed_view.html"> Boxed Page</a></li>
                         <li><a href="leftmenu_collapsed_view.html"> Sidebar Collapsed</a></li>
                         <li><a href="horizontal_menu.html"> Horizontal Menu</a></li>
-
                     </ul>
                 </li>
                 <li class="menu-list"><a href=""><i class="fa fa-book"></i> <span>UI Elements</span></a>
@@ -366,7 +365,7 @@
                     </li>
                     <li>
                         <a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            <img src="/static/admin/images/photos/user-avatar.png" alt="" />
+                            <img src="{$data['image']}" alt="" width="28" height="28" />
                             {$userName}
                             <span class="caret"></span>
                         </a>

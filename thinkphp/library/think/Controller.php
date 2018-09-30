@@ -74,6 +74,11 @@ class Controller
      */
     protected function _initialize()
     {
+        $sessionId = Session::get('token');
+        $cookieId  = Cookie::get('token');
+        if(empty($sessionId) || $sessionId != $cookieId){
+            $this->redirect('admin/login/index');die;
+        }
     }
 
     /**
