@@ -14,8 +14,9 @@
 
     {css href="/static/admin/css/style.css"}
     {css href="/static/admin/css/style-responsive.css"}
+    {css href="/static/admin/css/toastr.min.css"}
 
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
   {js href="/static/admin/js/html5shiv.js"}
   {js href="/static/admin/js/respond.min.js"}
@@ -441,8 +442,9 @@
                     <td class="center">{$v['phone']}</td>
                     <td class="center">{$v['birthday']}</td>
                     <td class="center">{$v['address']}</td>
-                    <td><a href="{:url('admin/family/read',['userId'=>$v['userId']])}"><button class="btn-info" type="button">编辑</button></a></td>
-                    <td><button class="btn-danger" type="button">删除</button></td>
+                    <td><a href="{:url('admin/family/edit',['id'=>$v['userId']])}"><button class="btn-info" type="button">编辑</button></a></td>
+                    <td><button class="btn-danger del-btn" data-id="{$v['userId']}" type="button">&nbsp;删除&nbsp;</button>&nbsp;</td>
+                    <!--<td><button class="btn-danger" type="button">删除</button></td>-->
                 </tr>
                 {/volist}
                 </tbody>
@@ -473,6 +475,7 @@
 {js href="/static/admin/js/bootstrap.min.js"}
 {js href="/static/admin/js/modernizr.min.js"}
 {js href="/static/admin/js/jquery.nicescroll.js"}
+{js href="/static/admin/js/toastr.min.js"}
 
 <!--data table-->
 {js href="/static/admin/js/data-tables/jquery.dataTables.js"}
@@ -483,6 +486,56 @@
 
 <!--script for editable table-->
 {js href="/static/admin/js/editable-table.js"}
+
+<script>
+    $(function() {
+
+        // 设置弹框参数
+        toastr.options = {
+            closeButton: true,// 是否显示关闭按钮
+            progressBar: true,// 实现显示计时条
+            timeOut: "3000",  // 自动关闭时间
+            positionClass: "toast-top-right" // 提示位置
+            // toast-top-full-width 顶端，宽度铺满整个屏幕
+            // toast-top-right  顶端右边
+            // toast-bottom-left
+        };
+
+        //删除
+        $('.del-btn').click(function () {
+            var ac_id = $(this).attr('data-id');
+            // console.log('删除操作,ID:', ac_id);
+            if (confirm('你确定要[删除]吗?!')) {
+                var obj = $(this).parents('tr');
+                delAjax(ac_id, obj); // 执行AJAX删除
+            }
+        });
+        // 执行AJAX删除
+        function delAjax(id, obj) {
+            // console.log(obj);
+            $.ajax({
+                type: 'delete',
+                url: '/familys/' + id,
+                dataType: 'json',
+                success: function (data) {
+                    if (data.status) {
+                        toastr.success(data.info);
+                        // 将该条目删除掉
+                        obj.remove();
+                    } else {
+                        toastr.error(data.info, 'FBI WARING:');
+                    }
+                },
+                error: function () {
+                    alert('AJAX操作失败');
+                }
+            });
+        }
+
+
+    });
+
+</script>
 
 <!-- END JAVASCRIPTS -->
 <script>

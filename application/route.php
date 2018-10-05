@@ -9,6 +9,10 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
+use think\Route;
+
+Route::resource('familys', 'admin/Family');
+
 return [
     '__pattern__' => [
         'name' => '\w+',

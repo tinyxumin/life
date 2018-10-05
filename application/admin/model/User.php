@@ -40,4 +40,10 @@ class User extends Model
         return $data;
     }
 
+    public function userDel($id)
+    {
+        $data = User::destroy($id);
+        return $data;
+    }
+
 }

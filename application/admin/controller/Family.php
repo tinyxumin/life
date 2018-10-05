@@ -3,7 +3,7 @@
 namespace app\admin\controller;
 
 use app\admin\model\User;
-use think\Cache;
+//use think\Cache;
 use think\Controller;
 use think\Request;
 
@@ -61,9 +61,9 @@ class Family extends Controller
      * @param  int  $id
      * @return \think\Response
      */
-    public function read($userId)
+    public function edit($id)
     {
-        $info = $this->user->userLogin(['userId'=>$userId]);
+        $info = $this->user->userLogin(['userId'=>$id]);
         return view('account/userEdit',['data'=>$info]);
     }
 
@@ -73,7 +73,7 @@ class Family extends Controller
      * @param  int  $id
      * @return \think\Response
      */
-    public function edit($id)
+    public function read($id)
     {
         //
     }
@@ -134,6 +134,18 @@ class Family extends Controller
      */
     public function delete($id)
     {
-        //
+        $result = $this->user->userDel($id);
+        if ($result > 0) {
+            $info['status'] = true;
+            $info['id'] = $id;
+            $info['info'] = 'ID为' . $id . '的用户删除成功!';
+        } else {
+            $info['status'] = false;
+            $info['id'] = $id;
+            $info['info'] = 'ID为' . $id . '的用户删除失败!';
+        }
+        // JSON 返回
+        return json($info);
+
     }
 }
