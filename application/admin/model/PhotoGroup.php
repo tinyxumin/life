@@ -4,10 +4,10 @@ namespace app\admin\model;
 
 use think\Model;
 
-class User extends Model
+class PhotoGroup extends Model
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = 'xm_user';
+    protected $table = 'xm_photo_group';
 
     //自定义初始化
     protected function initialize()
@@ -22,21 +22,9 @@ class User extends Model
      * @param $where
      * @return array
      */
-    public function userLogin($where)
+    public function group()
     {
-        $data = User::where($where)->field('userId,address,userName,phone,age,birthday,addTime,email,sex,image')->find();
-        return $data;
-    }
-
-
-    /**
-     * 查询用户信息
-     * @param $where
-     * @return array
-     */
-    public function userInfo()
-    {
-        $data = User::field('userId,address,userName,phone,age,birthday,addTime,email,sex')->select();
+        $data = PhotoGroup::field('id,name')->select();
         return $data;
     }
 
@@ -47,7 +35,7 @@ class User extends Model
      */
     public function userDel($id)
     {
-        $data = User::destroy($id);
+        $data = PhotoGroup::destroy($id);
         return $data;
     }
 
