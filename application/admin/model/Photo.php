@@ -22,9 +22,9 @@ class Photo extends Model
      * @param $where
      * @return array
      */
-    public function photo($where = '')
+    public function photo($where = array())
     {
-        $data = Photo::where($where)->field('image,remark,author,gid,type,size,id')->select();
+        $data = Photo::where($where)->field('image,remark,author,gid,type,size,id')->paginate(20);
         return $data;
     }
 

@@ -397,17 +397,22 @@
                         </header>
                         <div class="panel-body">
 
-                            <ul id="filters" class="media-filter">
-                                <li><a href="#" data-filter="*"> 所有</a></li>
+                            <ul class="media-filter">
+                                <li><a href="{:url('admin/family/photos')}"> 所有</a></li>
                                 {volist name="groups" id="v"}
-                                <li><a href="#" data-filter=".images">{$v['name']}</a></li>
+                                <li><a href="{:url('admin/family/photos',['id'=>$v['id']])}">{$v['name']}</a></li>
                                 {/volist}
                             </ul>
 
                             <div class="btn-group pull-right">
+                                <div style="float: left;margin-right: 20px">
+                                <a href="#myModal2" data-toggle="modal" class="btn btn-warning">
+                                    添加分组
+                                </a>
+                                </div>
                                 <form id="default" class="form-horizontal" method="post" enctype="multipart/form-data" action="{:url('admin/family/uploadPhotos')}">
-                                <button class="btn btn-info pull-right"> 确定</button>
-                                <div class="fileupload fileupload-new" data-provides="fileupload" style="margin-right: -250px"><input type="hidden">
+                                    <button class="btn btn-info pull-right"> 确定</button>
+                                <div class="fileupload fileupload-new" data-provides="fileupload" style="margin-right: -150px"><input type="hidden">
                                     <span class="btn btn-default btn-file">
                                                 <span class="fileupload-new"><i class="fa fa-paper-clip"></i> 上传照片</span>
                                                 <span class="fileupload-exists"><i class="fa fa-undo"></i> 跟换</span>
@@ -423,7 +428,7 @@
 
                             <div id="gallery" class="media-gal">
                                 {volist name="data" id="v"}
-                                <div class="images item " >
+                                <div class="images item " style="overflow: hidden;text-align: center" >
                                     <a href="#myModal" data-toggle="modal">
                                         <img src="{$v['image']}" alt="" id="imgPhoto" photoInfo="{$v['image']}" photoAuthor="{$v['author']}" photoGid="{$v['gid']}" photoText="{$v['remark']}" photoSize="{$v['size']}" photoType="{$v['type']}" photoId="{$v['id']}"/>
                                     </a>
@@ -431,17 +436,8 @@
                                 </div>
                                 {/volist}
                             </div>
-
                             <div class="col-md-12 text-center clearfix">
-                                <ul class="pagination">
-                                    <li><a href="#">«</a></li>
-                                    <li><a href="#">1</a></li>
-                                    <li><a href="#">2</a></li>
-                                    <li><a href="#">3</a></li>
-                                    <li><a href="#">4</a></li>
-                                    <li><a href="#">5</a></li>
-                                    <li><a href="#">»</a></li>
-                                </ul>
+                                {$data->render()}
                             </div>
 
                             <!-- Modal -->
@@ -455,10 +451,10 @@
 
                                         <div class="modal-body row">
 
-                                            <div class="col-md-5 img-modal">
-                                                <img class="showPhoto" src="" alt="">
+                                            <div class="col-md-5 img-modal" style="overflow: hidden;text-align: center">
+                                                <img class="showPhoto" src="" alt="" height="162">
 
-                                                <p class="mtop10"><strong>分组:</strong> <span class="photoGid"> </span></p>
+                                                <p class="mtop10"><strong>分组:</strong> <span class="photoGid" style="color: #ea755c;"> </span></p>
                                                 <p><strong>图片类型:</strong> <span class="photoType"> </span></p>
                                                 <p><strong>尺寸:</strong> <span class="photoSize"> </span> B</p>
                                                 <p><strong>作者:</strong> <a href="#" class="photoAuthor"> </a></p>
@@ -471,7 +467,13 @@
                                                 <form class="form-horizontal" method="post" action="{:url('admin/family/editPhotos')}">
                                                     <input type="hidden" value=" " class="photoId" name="id">
                                                     <div class="form-group">
-                                                    <label> 备 注</label>
+                                                    <label>修改分组</label>
+                                                        <select class="form-control m-bot15" name="groupName">
+                                                            {volist name="groups" id="v"}
+                                                            <option  value="{$v['id']}">{$v['name']}</option>
+                                                            {/volist}
+                                                        </select>
+                                                    <label> 添加备注</label>
                                                     <textarea rows="10" class="form-control photoText" name="remark"></textarea>
                                                 </div>
                                                 <div class="pull-right">
@@ -491,6 +493,26 @@
                                 </div>
                             </div>
                             <!-- modal -->
+
+                            <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal2" class="modal fade" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                                            <h4 class="modal-title">添加分组</h4>
+                                        </div>
+                                        <form method="post" action="{:url('admin/family/addGroup')}">
+                                        <div class="modal-body">
+                                            <input type="text" placeholder="分组名称" class="form-control" value="" name="groupsName">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                            <button class="btn btn-success">保存</button>
+                                        </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </section>
@@ -546,7 +568,7 @@
         $(document).on('click','#imgPhoto',function(){
             var photoInfo = $(this).attr('photoInfo');
             var photoAuthor = $(this).attr('photoAuthor');
-            var photoGid = $(this).attr('photoId');
+            var photoGid = $(this).attr('photoGid');
             var photoSize = $(this).attr('photoSize');
             var photoType = $(this).attr('photoType');
             var photoId = $(this).attr('photoId');

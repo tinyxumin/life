@@ -185,7 +185,7 @@ class Family extends Controller
      * @param
      * @return \think\Response
      */
-    public function photos()
+    public function photos($id = '')
     {
         $userId = cookie('userId');
         $userInfo = $this->user->userLogin(['userId'=>$userId]);
@@ -195,7 +195,11 @@ class Family extends Controller
         foreach ($groups as $val){
             $gName[$val['id']] = $val['name'];
         }
-        $data = $this->photos->photo();
+        $where = array();
+        if (!empty($id)){
+            $where = ['gid' => $id];
+        }
+        $data = $this->photos->photo($where);
         foreach($data as $v){
             if (!empty($gName[$v['gid']])){
                 $v['gid'] = $gName[$v['gid']];
@@ -216,7 +220,8 @@ class Family extends Controller
         $userInfo = $this->user->userLogin(['userId'=>$userId]);
         $userName = cookie('userName');
         $post = $request->post();
-        $this->photos->save($post,['id'=>$post['id']]);
+        $post['gid'] = $post['groupName'];
+        $this->photos->allowField(true)->save($post,['id'=>$post['id']]);
         return redirect('admin/family/photos');
 
     }
@@ -266,6 +271,15 @@ class Family extends Controller
         $data['type'] = $info->getExtension();
         $data['addTime'] = date('Y-m-d H:i:s');
         $this->photos->save($data);
+        return redirect('admin/family/photos');
+
+    }
+
+    public function addGroup(Request $request)
+    {
+        $post = $request->post();
+        $post['name'] = $post['groupsName'];
+        $this->group->allowField(true)->save($post);
         return redirect('admin/family/photos');
 
     }
