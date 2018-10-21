@@ -4,10 +4,10 @@ namespace app\admin\model;
 
 use think\Model;
 
-class Photo extends Model
+class Diary extends Model
 {
     // 设置当前模型对应的完整数据表名称
-    protected $table = 'xm_photos';
+    protected $table = 'xm_Diary';
 
     //自定义初始化
     protected function initialize()
@@ -18,13 +18,24 @@ class Photo extends Model
     }
 
     /**
-     * 查询用户信息
+     * 查询所有动态信息
      * @param $where
      * @return array
      */
-    public function photo($where = array())
+    public function moments()
     {
-        $data = Photo::where($where)->field('image,remark,author,gid,type,size,id,addTime')->paginate(20);
+        $data = Diary::where('status','eq',1)->field('userId,userName,diary,photo,image,type,addTime')->select();
+        return $data;
+    }
+
+    /**
+     * 查询个人动态信息
+     * @param $where
+     * @return array
+     */
+    public function userMoment($where)
+    {
+        $data = Diary::where($where)->field('userId,userName,diary,photo,image,type,addTime,status')->select();
         return $data;
     }
 
@@ -35,7 +46,7 @@ class Photo extends Model
      */
     public function photoDel($id)
     {
-        $data = Photo::destroy($id);
+        $data = Diary::destroy($id);
         return $data;
     }
 

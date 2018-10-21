@@ -391,7 +391,7 @@ class File extends SplFileObject
             } else {
                 switch ($this->rule) {
                     case 'date':
-                        $savename = date('Ymd') . DS . md5(microtime(true));
+                        $savename = date('Ymd') . DS . md5(microtime(true)+rand(1000,9999));
                         break;
                     default:
                         if (in_array($this->rule, hash_algos())) {
