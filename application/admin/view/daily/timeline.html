@@ -8,11 +8,17 @@
   <link rel="shortcut icon" href="#" type="image/png">
 
   <title> 个人生活记录</title>
+    <style>
+        .delCom:hover{
+            cursor: pointer;
+        }
+    </style>
+
+    {css href="/static/admin/css/message.css"}
 
     {css href="/static/admin/css/style.css"}
     {css href="/static/admin/css/style-responsive.css"}
-
-  <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!--[if lt IE 9]>
     {js href="/static/admin/js/html5shiv.js"}
     {js href="/static/admin/js/respond.min.js"}
@@ -295,7 +301,26 @@
                         <article class="timeline-item alt">
                             <div class="text-right">
                                 <div class="time-show first">
-                                    <a href="#" class="btn btn-primary">Today</a>
+                                        {if condition="$dk gt 1"}
+                                            {if condition="substr($data[$dk-1]['addTime'],0,10) neq substr($data[$dk-2]['addTime'],0,10)"}
+                                                {if condition="substr($v['addTime'],0,10) eq $date"}
+                                                    <div class="btn btn-primary">今天</div>
+                                                {elseif condition="substr($v['addTime'],0,10) eq $yesterday"}
+                                                    <div class="btn btn-primary">昨天</div>
+                                                {else}
+                                                    <div class="btn btn-primary">{$v['addTime']|mb_substr=0,10}</div>
+                                                {/if}
+                                            {/if}
+                                        {else/}
+                                            {if condition="substr($v['addTime'],0,10) eq $date"}
+                                                <div class="btn btn-primary">今天</div>
+                                            {elseif condition="substr($v['addTime'],0,10) eq $yesterday"}
+                                                <div class="btn btn-primary">昨天</div>
+                                            {else}
+                                                <div class="btn btn-primary">{$v['addTime']|mb_substr=0,10}</div>
+                                            {/if}
+                                        {/if}
+                                    </a>
                                 </div>
                             </div>
                         </article>
@@ -309,9 +334,23 @@
                                     <div class="panel-body">
                                         <span class="arrow"></span>
                                         <span class="timeline-icon"></span>
-                                        <span class="timeline-date" style="display: block;width: 485px;top: 14px;">{$v['addTime']}</span>
-                                        <h1 class="red">1 hour ago</h1>
-                                        <p>{$v['diary']}</p>
+                                        <div class="slide-toggle">
+                                            <input type="checkbox" name="state" dataid="{$v['id']}" class="js-switch-yellow switchery" <?php if($v['status'] == 1){echo 'checked';} ?>/>
+                                            <span cont="{$v['status']}" symbol="{$v['id']}" class="text-info tt{$v['id']}" style="font-size: 12px;margin-left: 10px;">
+                                                {if condition="$v['status']==1"}
+                                                    对所有人可见
+                                                {else/}
+                                                    *只对自己可见
+                                                {/if}
+                                            </span>
+                                        </div>
+                                        {if condition="$dk %2 == 1"}
+                                        <a href="#myModal3" data-toggle="modal"><h4 class="fa fa-trash-o pull-left text-danger delCom" comid="{$v['id']}"></h4></a>
+                                        {else/}
+                                        <h4 class="fa fa-trash-o pull-right text-danger delCom" comid="{$v['id']}"></h4>
+                                        {/if}
+                                        <h1 class="" style="display: block;margin-top: 8px;">{$v['addTime']|mb_substr=11,9}</h1>
+                                        <p style="margin-top: 8px;margin-bottom: -8px;color: #4a596f;font-size: 15px;">{$v['diary']}</p>
                                         {if condition="$v['photo']"}
                                         <div class="album">
                                             {volist name="(explode(',',$v['type']))" id='tval' key='tk'}
@@ -341,169 +380,34 @@
                                 </div>
                         </article>
                         {/volist}
-                        <!--<article class="timeline-item ">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">10:00 am</span>-->
-                                        <!--<h1 class="green">2 hours ago</h1>-->
-                                        <!--<p>Completed Coffee meeting with <a href="#">Stive Martin</a> regarding the Product Promotion</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                        <!--<article class="timeline-item alt">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow-alt"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">11:35 am</span>-->
-                                        <!--<h1 class="blue">10 hours ago</h1>-->
-                                        <!--<p>3 new photo Uploaded on facebook fan page</p>-->
-                                        <!--<div class="album">-->
-                                            <!--<a href="#">-->
-                                                <!--<img alt="" src="/static/admin/images/gallery/sm-img-1.jpg">-->
-                                            <!--</a>-->
-                                            <!--<a href="#">-->
-                                                <!--<img alt="" src="/static/admin/images/gallery/sm-img-2.jpg">-->
-                                            <!--</a>-->
-                                            <!--<a href="#">-->
-                                                <!--<img alt="" src="/static/admin/images/gallery/sm-img-3.jpg">-->
-                                            <!--</a>-->
-                                            <!--<a href="#">-->
-                                                <!--<img alt="" src="/static/admin/images/gallery/sm-img-1.jpg">-->
-                                            <!--</a>-->
-                                            <!--<a href="#">-->
-                                                <!--<img alt="" src="/static/admin/images/gallery/sm-img-2.jpg">-->
-                                            <!--</a>-->
-                                        <!--</div>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                        <!--<article class="timeline-item">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">3:20 pm</span>-->
-                                        <!--<h1 class="purple">4:30</h1>-->
-                                        <!--<p>Outdoor visit at California State Route 85 with John Boltana & Harry Piterson regarding to setup a new show room.</p>-->
-                                        <!--<p>-->
-                                            <!--<i class=" fa fa-exclamation-sign"></i> New task added for <span><a href="#" class="purple">Denial Collins</a></span>-->
-                                        <!--</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                        <!--<article class="timeline-item alt">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow-alt"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">07:49 pm</span>-->
-                                        <!--<h1 class="light-green">10 June | Friday</h1>-->
-                                        <!--<p>Jonatha Smith added new milestone <span><a href="#" class="light-green">prank</a></span> Lorem ipsum dolor sit amet consiquest dio</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-
-                        <!--<article class="timeline-item alt">-->
-                            <!--<div class="text-right">-->
-                                <!--<div class="time-show">-->
-                                    <!--<a href="#" class="btn btn-primary">Yesterday</a>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                        <!--<article class="timeline-item">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">3:20 pm</span>-->
-                                        <!--<h1 class="yellow">4:30</h1>-->
-                                        <!--<p>Montly Regular Medical check up at Greenland Hospital by the doctor <span><a href="#" class="yellow">  Berry Moor </a></span> </p>-->
-
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                        <!--<article class="timeline-item alt">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow-alt"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">07:49 pm</span>-->
-                                        <!--<h1 class="">4:55</h1>-->
-                                        <!--<p>Download the new updates of SAP ERP Solution</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-
-                        <!--<article class="timeline-item">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">07:49 pm</span>-->
-                                        <!--<h1 class="blue">10 June | Friday</h1>-->
-                                        <!--<p>Jonatha Smith added new milestone <span><a class="blue" href="#">prank</a></span> Lorem ipsum dolor sit amet consiquest dio</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-                        <!--<article class="timeline-item alt">-->
-                            <!--<div class="text-right">-->
-                                <!--<div class="time-show">-->
-                                    <!--<a href="#" class="btn btn-primary">20 December 2013</a>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-
-                        <!--<article class="timeline-item alt">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow-alt"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">07:49 pm</span>-->
-                                        <!--<h1 class="">13 March | Sunday</h1>-->
-                                        <!--<p>Download the new updates of SAP ERP Solution</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-
-                        <!--<article class="timeline-item">-->
-                            <!--<div class="timeline-desk">-->
-                                <!--<div class="panel">-->
-                                    <!--<div class="panel-body">-->
-                                        <!--<span class="arrow"></span>-->
-                                        <!--<span class="timeline-icon"></span>-->
-                                        <!--<span class="timeline-date">07:49 pm</span>-->
-                                        <!--<h1 class="red">5:33</h1>-->
-                                        <!--<p>Jonatha Smith added new milestone <span><a class="red" href="#">prank</a></span> Lorem ipsum dolor sit amet consiquest dio</p>-->
-                                    <!--</div>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</article>-->
-
                     </div>
                 </div>
             </div>
 
         </div>
         <!--body wrapper end-->
+
+        <!-- Modal -->
+        <div aria-hidden="true" aria-labelledby="myModalLabel" role="dialog" tabindex="-1" id="myModal3" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button aria-hidden="true" data-dismiss="modal" class="close" type="button">×</button>
+                        <h4 class="modal-title">确认删除</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        您确定要【删除】吗？
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal"> 取消</button>
+                        <button type="button" aria-hidden="true" class="btn btn-danger" data-dismiss="modal" id="btnDel"> 确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- modal -->
 
         <!--footer section start-->
         <footer class="">
@@ -518,11 +422,88 @@
 
 <!-- Placed js at the end of the document so the pages load faster -->
 {js href="/static/admin/js/jquery-1.10.2.min.js"}
+{js href="/static/admin/js/message.min.js"}
+
+<script>
+    $(function() {
+
+        $(document).on('click', '.switchery', function () {
+            var dataid = $(this).attr('dataid');
+            if($('.tt'+dataid).attr('cont') == 1){
+                $('.tt'+dataid).text('*只对自己可见');
+                $('.tt'+dataid).attr('cont',0);
+            }else{
+                $('.tt'+dataid).text('对所有人可见');
+                $('.tt'+dataid).attr('cont',1);
+            }
+            $.ajax({
+                type:'post',
+                data:{'state':$('.tt'+dataid).attr('cont'),'comid':$('.tt'+dataid).attr('symbol')},
+                url:"{:url('admin/daily/updateState')}",
+                success:function(data){
+
+                },
+                error:function(){
+                    alert('出错了，请稍后再试!')
+                }
+            });
+        });
+
+
+
+        $('.delCom').click(function () {
+            var cid = $(this).attr('comid');
+            var obj = $(this).parents('article');
+            delCom(cid,obj);
+
+        });
+
+        function delCom(cid,obj){
+            $("#btnDel").bind('click',function() {
+                delAjax(cid, obj); // 执行AJAX删除});
+            })
+        }
+
+
+        function delAjax(cid,obj) {
+            $.ajax({
+                type: "post",
+                data: {'cid':cid},
+                url: "{:url('admin/daily/comDel')}",
+                success: function (data) {
+                    if (data.status){
+                        $.message(data.info);
+                        // setTimeout(function(){
+                        //     location.href = "{:url('admin/cartoon/index')}";
+                        // },1000);
+                        obj.remove();
+                        return true;
+                    }else{
+                        $.message({
+                            message:'删除失败',
+                            type:'error'
+                        });
+                        return false;
+                    }
+                },
+                error: function () {
+                    alert('出错了');
+                }
+            });
+        }
+    });
+</script>
+
+
+
 {js href="/static/admin/js/jquery-ui-1.9.2.custom.min.js"}
 {js href="/static/admin/js/jquery-migrate-1.2.1.min.js"}
 {js href="/static/admin/js/bootstrap.min.js"}
 {js href="/static/admin/js/modernizr.min.js"}
 {js href="/static/admin/js/jquery.nicescroll.js"}
+
+
+
 
 <!--common scripts for all pages-->
 {js href="/static/admin/js/scripts.js"}

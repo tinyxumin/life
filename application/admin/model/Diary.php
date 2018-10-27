@@ -24,7 +24,7 @@ class Diary extends Model
      */
     public function moments()
     {
-        $data = Diary::where('status','eq',1)->field('userId,userName,diary,photo,image,type,addTime')->select();
+        $data = Diary::where('status','eq',1)->field('userId,userName,diary,photo,image,type,addTime')->order('addTime desc')->select();
         return $data;
     }
 
@@ -35,16 +35,16 @@ class Diary extends Model
      */
     public function userMoment($where)
     {
-        $data = Diary::where($where)->field('userId,userName,diary,photo,image,type,addTime,status')->select();
+        $data = Diary::where($where)->field('id,userId,userName,diary,photo,image,type,addTime,status')->order('addTime desc')->select();
         return $data;
     }
 
     /**
-     * 删除用户信息
+     * 删除用户动态信息
      * @param $where
      * @return array
      */
-    public function photoDel($id)
+    public function comDel($id)
     {
         $data = Diary::destroy($id);
         return $data;

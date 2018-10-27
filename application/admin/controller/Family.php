@@ -117,7 +117,7 @@ class Family extends Controller
      * @param  int  $id
      * @return \think\Response
      */
-    public function update(Request $request, $userId)
+    public function upda(Request $request, $userId)
     {
         $data = array();
         $post = $request->post();

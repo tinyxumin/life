@@ -314,7 +314,7 @@
 
         <!--body wrapper start-->
         <div class="wrapper">
-            <form id="default" class="form-horizontal" method="post" enctype="multipart/form-data" action="{:url('admin/family/update')}">
+            <form id="default" class="form-horizontal" method="post" enctype="multipart/form-data" action="{:url('admin/family/upda')}">
                 <input type="hidden" name="userId" value="{$data['userId']}">
                 <input type="hidden" name="_method" value="put">
                 <div class="form-group last">
@@ -389,7 +389,7 @@
                 <div class="form-group">
                     <label class="col-md-6 col-sm-6 control-label"></label>
                     <div class="col-md-4 col-sm-4">
-                        <button class="btn btn-danger">取消</button>
+                        <a href="{:url('admin/family/index')}"><button class="btn btn-danger" type="button">取消</button></a>
                         <button class="btn btn-success">确认</button>
                     </div>
                 </div>

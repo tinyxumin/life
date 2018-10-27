@@ -38,6 +38,11 @@ class Daily extends Controller
         return view('daily/daily',['userInfo' => $this->userInfo,'data'=>$data]);
     }
 
+    /**
+     * 发布动态
+     * @param Request $request
+     * @return \think\response\Redirect|void
+     */
     public function save(Request $request)
     {
         $post = $request->post();
@@ -78,13 +83,47 @@ class Daily extends Controller
         return redirect('admin/daily/index');
     }
 
+    /**
+     * 用户记录
+     * @return \think\response\View
+     */
     public function userRecord()
     {
         $where = [
             'userId'=>$this->userInfo['userId']
         ];
         $data = $this->diary->userMoment($where);
-        return view('daily/timeline',['userInfo' => $this->userInfo,'data'=>$data]);
+        $date = date('Y-m-d');
+        $yesterday = date('Y-m-d 00:00:00',strtotime('-1 day'));
+        return view('daily/timeline',['userInfo' => $this->userInfo,'data'=>$data,'date'=>$date,'yesterday'=>$yesterday]);
+    }
+
+    /**
+     * 删除用户动态  2018-10-23 11:40
+     * @param Request $request
+     * @return mixed
+     */
+    public function comDel(Request $request)
+    {
+        $post = $request->post();
+        $result = $this->diary->comDel($post['cid']);
+        if ($result > 0){
+            $info['status'] = true;
+            $info['data'] = '删除成功';
+        }else{
+            $info['status'] = false;
+        }
+        return $info;
+    }
+
+    public function updateState(Request $request)
+    {
+        $post = $request->post();
+        $data = ['status'=>$post['state']];
+        $res = $this->diary->save($data,['id'=>$post['comid']]);
+        return $post;
+
+
     }
 
 }
